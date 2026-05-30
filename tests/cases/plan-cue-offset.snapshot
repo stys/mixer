@@ -1,0 +1,23 @@
+exit: 0
+===== stdout =====
+matrix plan:
+  main sub-device: S1UID
+  sub-device order (3): iPadUID S1UID SSLUID
+  aggregate lanes: 6 in / 6 out
+  captured sources (2), scratch width 4:
+    ipad @scratch[0..2)
+    s1 @scratch[2..4)
+  input channel map: [0, 1, 2, 3]
+  bus lanes (2), total 4:
+    main @bus[0..2)
+    cue @bus[2..4)
+  sends (2):
+    scratch[2..4) --(gain 0.8)--> bus[0..2)
+    scratch[0..2) --(gain 1)--> bus[2..4)
+  destinations (1), internal-out width 4:
+    ssl @out[0..4)
+  output channel map: [-1, -1, 0, 1, 2, 3]
+  outputs (2):
+    bus[0..2) --> out[0..2)
+    bus[2..4) --> out[2..4)
+===== stderr =====

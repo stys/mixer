@@ -1,0 +1,5 @@
+{
+  "mic": { "uid": "MicUID", "in": 1, "out": 0 },
+  "iface": { "uid": "IfaceUID", "in": 2, "out": 2 },
+  "spk": { "uid": "SpkUID", "in": 0, "out": 2 }
+}

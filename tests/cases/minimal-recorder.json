@@ -1,0 +1,7 @@
+{
+  "devices": {
+    "s1": "Roland AIRA Compact S-1",
+    "digitakt": "Elektron Digitakt II"
+  },
+  "recording": { "enabled": true, "record": ["sources"] }
+}

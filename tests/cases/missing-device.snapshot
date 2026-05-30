@@ -1,0 +1,4 @@
+exit: 1
+===== stdout =====
+===== stderr =====
+error: config: send.from 'synth' is not a device key

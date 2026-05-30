@@ -1,0 +1,5 @@
+{
+  "s1": { "uid": "AppleUSBAudioEngine:Roland:S-1", "in": 2, "out": 2 },
+  "digitakt": { "uid": "Elektron:Digitakt-II", "in": 2, "out": 2 },
+  "speakers": { "uid": "BuiltInSpeakerDevice", "in": 0, "out": 2 }
+}

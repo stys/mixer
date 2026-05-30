@@ -1,0 +1,26 @@
+{
+  "sample_rate": 48000,
+  "buffer_frames": 64,
+  "devices": {
+    "s1": "Roland AIRA Compact S-1",
+    "digitakt": "Elektron Digitakt II",
+    "speakers": "MacBook Pro Speakers"
+  },
+  "buses": [
+    { "name": "to_digitakt", "channels": 2 },
+    { "name": "to_s1", "channels": 2 },
+    { "name": "monitor", "channels": 2 }
+  ],
+  "sends": [
+    { "from": "s1", "to": "to_digitakt", "gain": 1.0 },
+    { "from": "digitakt", "to": "to_s1", "gain": 1.0 },
+    { "from": "s1", "to": "monitor", "gain": 0.7 },
+    { "from": "digitakt", "to": "monitor", "gain": 0.7 }
+  ],
+  "outputs": [
+    { "bus": "to_digitakt", "device": "digitakt" },
+    { "bus": "to_s1", "device": "s1" },
+    { "bus": "monitor", "device": "speakers" }
+  ],
+  "recording": { "enabled": true, "directory": "~/Documents/mixer-sessions", "record": ["sources", "buses"] }
+}

@@ -1,0 +1,5 @@
+{
+  "s1":   { "uid": "S1UID",   "in": 2, "out": 2 },
+  "ipad": { "uid": "iPadUID", "in": 2, "out": 0 },
+  "ssl":  { "uid": "SSLUID",  "in": 2, "out": 4 }
+}

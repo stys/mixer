@@ -1,0 +1,4 @@
+exit: 1
+===== stdout =====
+===== stderr =====
+error: config: feedback self-loop — device 'digitakt' feeds bus 'loop' which routes straight back to it

@@ -1,0 +1,35 @@
+{
+  "sample_rate": 48000,
+  "buffer_frames": 128,
+  "devices": {
+    "s1": "S-1",
+    "digitakt": "Elektron Digitakt II",
+    "ipad": "iPad",
+    "mic": "Wireless microphone",
+    "ssl": "SSL 2+"
+  },
+  "buses": [
+    { "name": "to_digitakt", "channels": 2 },
+    { "name": "to_s1",       "channels": 2 },
+    { "name": "cue",         "channels": 2 },
+    { "name": "mix",         "channels": 2 }
+  ],
+  "sends": [
+    { "from": "s1",       "to": "to_digitakt", "gain": 0.7 },
+    { "from": "ipad",     "to": "to_digitakt", "gain": 0.7 },
+    { "from": "digitakt", "to": "to_s1",       "gain": 0.7 },
+    { "from": "ipad",     "to": "to_s1",       "gain": 0.7 },
+    { "from": "ipad",     "to": "cue",         "gain": 1.0 },
+    { "from": "s1",       "to": "mix",         "gain": 0.6 },
+    { "from": "digitakt", "to": "mix",         "gain": 0.6 },
+    { "from": "ipad",     "to": "mix",         "gain": 0.6 },
+    { "from": "mic",      "to": "mix",         "gain": 0.6 }
+  ],
+  "outputs": [
+    { "bus": "to_digitakt", "device": "digitakt" },
+    { "bus": "to_s1",       "device": "s1" },
+    { "bus": "cue",         "device": "ssl", "device_channel": 2 },
+    { "bus": "mix",         "device": "ssl", "device_channel": 0 }
+  ],
+  "recording": { "enabled": true, "directory": "~/Documents/mixer-sessions", "record": ["sources"] }
+}

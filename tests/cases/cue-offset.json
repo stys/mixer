@@ -1,0 +1,21 @@
+{
+  "sample_rate": 48000,
+  "buffer_frames": 128,
+  "devices": {
+    "s1": "S-1",
+    "ipad": "iPad",
+    "ssl": "SSL 2+"
+  },
+  "buses": [
+    { "name": "main", "channels": 2 },
+    { "name": "cue",  "channels": 2 }
+  ],
+  "sends": [
+    { "from": "s1",   "to": "main", "gain": 0.8 },
+    { "from": "ipad", "to": "cue",  "gain": 1.0 }
+  ],
+  "outputs": [
+    { "bus": "main", "device": "ssl", "device_channel": 0 },
+    { "bus": "cue",  "device": "ssl", "device_channel": 2 }
+  ]
+}

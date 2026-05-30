@@ -1,0 +1,12 @@
+exit: 0
+===== stdout =====
+config summary:
+  sample rate: 48000 Hz, buffer: 64 frames
+  devices (2):
+    digitakt -> "Elektron Digitakt II"
+    s1 -> "Roland AIRA Compact S-1"
+  buses (0):
+  sends (0):
+  outputs (0):
+  recording: on [sources]
+===== stderr =====

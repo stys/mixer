@@ -1,0 +1,4 @@
+exit: 1
+===== stdout =====
+===== stderr =====
+error: invalid JSON in bad-json.json: [json.exception.parse_error.101] parse error at line 1, column 49: syntax error while parsing value - unexpected '}'; expected '[', '{', or a literal

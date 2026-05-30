@@ -1,0 +1,21 @@
+{
+  "sample_rate": 48000,
+  "buffer_frames": 64,
+  "devices": {
+    "mic": "Some Mono Mic",
+    "iface": "Some Stereo Interface",
+    "spk": "Some Speakers"
+  },
+  "buses": [
+    { "name": "voice", "channels": 1 },
+    { "name": "music", "channels": 2 }
+  ],
+  "sends": [
+    { "from": "mic", "to": "voice", "gain": 1.0 },
+    { "from": "iface", "to": "music", "gain": 0.5 }
+  ],
+  "outputs": [
+    { "bus": "voice", "device": "spk" },
+    { "bus": "music", "device": "spk" }
+  ]
+}

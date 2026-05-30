@@ -1,0 +1,25 @@
+exit: 0
+===== stdout =====
+config summary:
+  sample rate: 48000 Hz, buffer: 64 frames
+  devices (3):
+    digitakt -> "Elektron Digitakt II"
+    s1 -> "Roland AIRA Compact S-1"
+    speakers -> "MacBook Pro Speakers"
+  buses (3):
+    to_digitakt (2 ch)
+    to_s1 (2 ch)
+    monitor (2 ch)
+  sends (4):
+    s1 --(gain 1)--> to_digitakt
+    digitakt --(gain 1)--> to_s1
+    s1 --(gain 0.7)--> monitor
+    digitakt --(gain 0.7)--> monitor
+  outputs (3):
+    to_digitakt -> digitakt
+    to_s1 -> s1
+    monitor -> speakers
+  recording: on [sources, buses] dir=~/Documents/mixer-sessions
+===== stderr =====
+warning: potential feedback loop across devices: digitakt -> s1 -> digitakt
+  (may be intentional for cross-monitoring, but can howl if a device re-emits its input — verify on the hardware)

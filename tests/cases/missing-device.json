@@ -1,0 +1,6 @@
+{
+  "devices": { "speakers": "MacBook Pro Speakers" },
+  "buses": [ { "name": "monitor", "channels": 2 } ],
+  "sends": [ { "from": "synth", "to": "monitor", "gain": 1.0 } ],
+  "outputs": [ { "bus": "monitor", "device": "speakers" } ]
+}

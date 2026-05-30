@@ -1,0 +1,6 @@
+{
+  "devices": { "digitakt": "Elektron Digitakt II" },
+  "buses": [ { "name": "loop", "channels": 2 } ],
+  "sends": [ { "from": "digitakt", "to": "loop", "gain": 1.0 } ],
+  "outputs": [ { "bus": "loop", "device": "digitakt" } ]
+}
