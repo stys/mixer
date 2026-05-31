@@ -5,6 +5,9 @@ private aggregate device from the referenced hardware, sums sources through
 named buses, and routes them to device outputs. Optionally records per-source
 and per-bus WAV stems.
 
+For more information and motivation see this video 
+https://www.youtube.com/watch?v=xq3tZH-dLCM
+
 ## Build
 
 Requires CMake (3.20+) and a C++20 toolchain (Apple Clang). nlohmann/json is
