@@ -4,6 +4,7 @@
 #include "config.h"
 #include "device.h"
 #include "matrix.h"
+#include "meter.h"
 #include "recorder.h"
 #include "router.h"
 
@@ -30,6 +31,8 @@ static void usage() {
         "mixer — low-latency Core Audio router/mixer\n\n"
         "  mixer <config.json>     route/mix audio per config\n"
         "      [--seconds <n>]     auto-stop after n seconds (default: run until Ctrl-C)\n"
+        "      [--meters]          show live level meters (on by default)\n"
+        "      [--no-meters]       hide live level meters\n"
         "  mixer --check <cfg>     parse + validate a config, print the plan, exit\n"
         "  mixer --plan <cfg>      print the computed channel-lane matrix plan, exit\n"
         "      [--devs <json>]     ...using synthetic device channel counts (no hardware)\n"
@@ -76,8 +79,9 @@ static std::string timestamp() {
     return buf;
 }
 
-static int run(const std::string& configPath, double seconds) {
+static int run(const std::string& configPath, double seconds, bool cliMeters, bool cliNoMeters) {
     Config cfg = loadConfig(configPath);
+    const bool wantMeters = cliNoMeters ? false : (cliMeters || cfg.meters);
 
     std::printf("mixer: resolving devices...\n");
     auto devs = resolveFromHardware(cfg);
@@ -120,9 +124,29 @@ static int run(const std::string& configPath, double seconds) {
         std::printf("mixer: recording -> %s\n", sessionDir.string().c_str());
     }
 
+    // Live level meters: one row per source, then one per bus (router maps the rows).
+    std::unique_ptr<Meter> meter;
+    if (wantMeters) {
+        // One label per channel, sources then buses — must match the router's
+        // report order in render(). Stereo gets L/R; wider gets 1-based indices.
+        auto chanLabel = [](const std::string& name, uint32_t c, uint32_t nch) -> std::string {
+            if (nch <= 1) return name;
+            if (nch == 2) return name + (c == 0 ? " L" : " R");
+            return name + " " + std::to_string(c + 1);
+        };
+        std::vector<std::string> labels;
+        for (const auto& s : plan.sources)
+            for (uint32_t c = 0; c < s.channels; ++c) labels.push_back(chanLabel(s.key, c, s.channels));
+        for (const auto& b : plan.busLanes)
+            for (uint32_t c = 0; c < b.channels; ++c) labels.push_back(chanLabel(b.name, c, b.channels));
+        meter = std::make_unique<Meter>(std::move(labels));
+        router.meter = meter.get();
+    }
+
     std::signal(SIGINT, onSignal);
     std::signal(SIGTERM, onSignal);
     router.start();
+    if (meter) meter->start();
 
     const double bufMs = static_cast<double>(cfg.bufferFrames) / cfg.sampleRate * 1000.0;
     if (seconds > 0) {
@@ -136,6 +160,7 @@ static int run(const std::string& configPath, double seconds) {
         if (seconds > 0 && (++ticks) * 0.1 >= seconds) break;
     }
 
+    if (meter) meter->stop();      // stop drawing before we print shutdown lines
     std::printf("\nmixer: shutting down...\n");
     router.stop();                 // stop audio first — no more recorder.append() calls
     for (auto& r : recorders) r->stop();  // then flush + close files
@@ -178,7 +203,7 @@ int main(int argc, char** argv) {
 
         double seconds = 0;
         if (const char* s = valueAfter(args, "--seconds")) seconds = std::atof(s);
-        return run(args[1], seconds);
+        return run(args[1], seconds, has("--meters"), has("--no-meters"));
     } catch (const std::exception& e) {
         std::fprintf(stderr, "error: %s\n", e.what());
         return 1;

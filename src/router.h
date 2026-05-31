@@ -14,6 +14,7 @@
 #include <vector>
 
 class Recorder;  // forward-declared; only pointers held here
+class Meter;     // forward-declared; only a pointer held here
 
 class Router {
 public:
@@ -27,6 +28,12 @@ public:
     // setup(); fill in (before start()) to record a given source/bus, else leave null.
     std::vector<Recorder*> sourceRecorders;
     std::vector<Recorder*> busRecorders;
+
+    // Optional live level meter. Rows are [sources..., buses...] in plan order, so
+    // source i reports to row i and bus j to row (sources.size() + j). Set before
+    // start() to enable; leave null to disable. Router owns no metering knowledge
+    // beyond "fold each source/bus block peak into its row."
+    Meter* meter = nullptr;
 
     void setup(AudioObjectID aggregateID, double sampleRate, uint32_t bufferFrames,
                const MatrixPlan& plan);

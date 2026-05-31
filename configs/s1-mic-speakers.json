@@ -1,0 +1,24 @@
+{
+  "sample_rate": 44100,
+  "buffer_frames": 128,
+  "devices": {
+    "s1": "S-1",
+    "mic": "Wireless microphone",
+    "speakers": "MacBook Pro Speakers"
+  },
+  "buses": [
+    { "name": "mix", "channels": 2 }
+  ],
+  "sends": [
+    { "from": "s1",  "to": "mix", "gain": 0.35 },
+    { "from": "mic", "to": "mix", "gain": 2.0 }
+  ],
+  "outputs": [
+    { "bus": "mix", "device": "speakers" }
+  ],
+  "recording": {
+    "enabled": true,
+    "directory": "~/Documents/mixer-sessions",
+    "record": ["sources", "buses"]
+  }
+}

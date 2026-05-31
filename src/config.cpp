@@ -143,6 +143,7 @@ Config loadConfig(const std::string& path) {
     try {
         c.sampleRate = j.value("sample_rate", 48000.0);
         c.bufferFrames = j.value("buffer_frames", static_cast<uint32_t>(64));
+        c.meters = j.value("meters", true);
 
         if (!j.contains("devices") || !j["devices"].is_object()) {
             throw std::runtime_error("config: 'devices' object is required");

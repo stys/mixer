@@ -45,6 +45,7 @@ struct Config {
     std::vector<SendConfig> sends;
     std::vector<OutputConfig> outputs;
     RecordingConfig recording;
+    bool meters = true;  // live terminal level meters; on by default ("meters": false or --no-meters to disable)
 };
 
 // Parse + structurally validate a config file. Throws std::runtime_error with a

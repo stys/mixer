@@ -2,11 +2,30 @@
 
 #include "ca_error.h"
 #include "ca_props.h"
+#include "meter.h"
 #include "recorder.h"
 
+#include <cmath>
 #include <cstdio>
 #include <cstring>
 #include <stdexcept>
+
+namespace {
+
+// Peak (max|sample|) across `channels` contiguous planar buffers starting at base.
+float blockPeak(float* const* pool, uint32_t base, uint32_t channels, UInt32 frames) {
+    float pk = 0.0f;
+    for (uint32_t c = 0; c < channels; ++c) {
+        const float* d = pool[base + c];
+        for (UInt32 f = 0; f < frames; ++f) {
+            const float a = std::fabs(d[f]);
+            if (a > pk) pk = a;
+        }
+    }
+    return pk;
+}
+
+}  // namespace
 
 // C trampoline: AURenderCallback has C language linkage. Forwards to the Router.
 extern "C" OSStatus mixerRenderCallback(void* inRefCon,
@@ -190,6 +209,22 @@ OSStatus Router::render(AudioUnitRenderActionFlags* ioActionFlags,
     for (size_t i = 0; i < plan_.busLanes.size(); ++i) {
         if (Recorder* r = busRecorders[i]) {
             r->append(busBuf_.data() + plan_.busLanes[i].offset, inNumberFrames);
+        }
+    }
+
+    // 4b. Feed the level meter: one row per channel, sources then buses. main
+    //     builds its labels in this exact order, so row indices line up.
+    if (meter) {
+        size_t row = 0;
+        for (const auto& s : plan_.sources) {
+            for (uint32_t c = 0; c < s.channels; ++c) {
+                meter->report(row++, blockPeak(scratch_.data(), s.scratchOffset + c, 1, inNumberFrames));
+            }
+        }
+        for (const auto& b : plan_.busLanes) {
+            for (uint32_t c = 0; c < b.channels; ++c) {
+                meter->report(row++, blockPeak(busBuf_.data(), b.offset + c, 1, inNumberFrames));
+            }
         }
     }
 

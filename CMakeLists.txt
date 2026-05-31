@@ -31,6 +31,7 @@ add_executable(mixer
   src/router.cpp
   src/config.cpp
   src/matrix.cpp
+  src/meter.cpp
 )
 
 target_link_libraries(mixer PRIVATE
